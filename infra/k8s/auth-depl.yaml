@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: gcr.io/ticketing-dev-295609/auth
+          image: ggaondocker/auth
 
 ---
 apiVersion: v1
