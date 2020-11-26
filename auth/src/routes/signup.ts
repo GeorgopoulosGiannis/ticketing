@@ -5,6 +5,7 @@ import { validateRequest } from '../middlewares/validate-request';
 import { User } from '../models/user';
 import { BadRequestError } from '../errors/bad-request-error';
 import jwt from 'jsonwebtoken';
+import { DatabaseConnectionError } from '../errors/database-connection-error';
 
 const router = express.Router();
 
@@ -27,8 +28,7 @@ router.post('/api/users/signup', [
       throw new BadRequestError('Email in use');
     }
     const user = User.build({ email, password });
-    await user.save().catch(e => { console.log(e) });
-
+    await user.save().catch(e => { throw new DatabaseConnectionError() });
     const userJwt = jwt.sign({
       id: user.id,
       email: user.email
