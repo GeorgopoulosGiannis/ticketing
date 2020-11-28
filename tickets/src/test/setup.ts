@@ -38,9 +38,8 @@ afterAll(async () => {
 
 
 global.signin = () => {
-
   const payload = {
-    id: '123213123',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   };
 
@@ -52,7 +51,6 @@ global.signin = () => {
 
 
   const base64 = Buffer.from(sessionJSON).toString('base64');
-  console.log('base64', base64)
   return [`express:sess=${base64}`];
 
 };
