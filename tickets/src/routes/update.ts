@@ -6,8 +6,9 @@ import {
   requireAuth,
   NotAuthorizedError
 } from '@ggaorg/common';
-
 import { Ticket } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -37,6 +38,13 @@ router.put('/api/tickets/:id',
       price: req.body.price
     });
     await ticket.save();
+
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    })
     res.send(ticket);
   });
 
